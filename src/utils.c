@@ -1,7 +1,5 @@
 #include "header/utils.h"
-#include "stdio.h"
 #include <string.h>
-#include <malloc.h>
 
 #define TRUE 1
 #define FALSE 0
@@ -58,7 +56,7 @@ const char* get_argument_splits(PROGRAM_ARGUMENTS, const char* searched, char de
 		if (pos == InvalidPos) continue;
 
 		const char* second[100];
-		substr(line, second, 0, pos);
+		substr(line, second, pos + 1, strlen(line));
 
 
 		return second;

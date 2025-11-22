@@ -20,3 +20,5 @@ struct Logger* GetMainLogger()
     logger = create_logger("Main");
     return &logger;
 }
+
+

@@ -45,5 +45,7 @@ struct Logger* GetMainLogger();
 #define DebugLogger GetDebugLogger()
 #define MainLogger GetMainLogger()
 
+void compile_gnu(const char* arguments);
+
 
 #endif
