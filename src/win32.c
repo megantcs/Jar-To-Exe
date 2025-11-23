@@ -7,7 +7,6 @@ int is_cmd_path(const char* cmd)
 {
     DEBUG_ASSERT(cmd);
 
-    // Простая версия БЕЗ форматирования
     char command[256];
     snprintf(command, sizeof(command), "where \"%s\" >nul 2>&1", cmd);
 
@@ -78,7 +77,7 @@ char* popen(const char* command)
 
 int zip_archive(const char* folder_path, const char* archive_name)
 {
-    char command[1024];
+   char command[1024];
 
     snprintf(command, sizeof(command),
         "powershell -Command \"Compress-Archive -Path '%s' -DestinationPath '%s' -Force\"",
@@ -111,4 +110,26 @@ const char* temp_is_time(const char* extension)
         extension);
 
     return filename;
+}
+
+int extract_zip(const char* archive_path, const char* output_dir) {
+    char current_dir[MAX_PATH];
+    GetCurrentDirectoryA(MAX_PATH, current_dir);
+
+    char seven_zip_path[MAX_PATH];
+    snprintf(seven_zip_path, sizeof(seven_zip_path),
+        "%s\\extensions\\7za.exe", current_dir);
+
+    if (GetFileAttributesA(seven_zip_path) == INVALID_FILE_ATTRIBUTES) {
+        printf("Error: 7za.exe not found at: %s\n", seven_zip_path);
+        return -3;
+    }
+
+    char command[1024];
+    snprintf(command, sizeof(command),
+        "%s x \"%s\" -o\"%s\" -y",
+        seven_zip_path, archive_path, output_dir);
+
+    popen(command);
+    return 0;
 }

@@ -14,7 +14,8 @@ void build_jar_to_dll(struct buildItem* const _this)
 	log(DebugLogger, "hex set path: %s", hex_path);
 	if (hex_state != 0) {
 		log(MainLogger, "error hex $template_jar_to_dll\\header.h, error code %d", hex_state);
-		return;
+		global.exit_code = -1;
+		goto end;
 	}
 
 	char* content = str_spr_str("%s\n%s\n%s\n%s\n%s\n%s",

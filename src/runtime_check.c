@@ -8,6 +8,9 @@
 struct timer* __program_timer = nullptr;
 double __program_executed_duration_ms = -1;
 double __program_executed_duration_second = -1;
+
+#define first_detect_compiler !has_arg(PARAM_NO_AUTO_DETECTED_COMPILER)? build_sys_first_detect_compiler() : "g++"
+
 #define config_prefix "$ [Config] "
 
 void __common__start_program(PROGRAM_ARGUMENTS)
@@ -49,7 +52,7 @@ void __common__global_values_check()
 
 	COPY_OR_NULL(global.template_dll_to_exe, "template\\dll_to_exe");
 	COPY_OR_NULL(global.template_jar_to_dll, "template\\jar_to_dll");
-	COPY_OR_NULL(global.gnu_compiler, build_sys_first_detect_compiler());
+	COPY_OR_NULL(global.gnu_compiler, first_detect_compiler);
 
 	ASSERT(ExistDirectoryA(global.log_dir) == 0, config_prefix "param [log_dir] is empty | missing log directory.\n");
 }

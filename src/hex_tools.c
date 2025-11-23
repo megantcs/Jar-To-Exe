@@ -44,33 +44,28 @@ int file_to_hex_dump(const char* input_file, const char* output_file)
 
     long file_size = get_file_size(input_file);
     if (file_size < 0) {
-        printf("Error: Cannot get file size or file not found: %s\n", input_file);
         return 2;
     }
 
     input = fopen(input_file, "rb");
     if (!input) {
-        printf("Error: Cannot open input file: %s\n", input_file);
         return 2;
     }
 
     output = fopen(output_file, "w");
     if (!output) {
-        printf("Error: Cannot create output file: %s\n", output_file);
         fclose(input);
         return 2;
     }
 
     buffer = (unsigned char*)malloc(file_size);
     if (!buffer) {
-        printf("Error: Memory allocation failed\n");
         return_code = 2;
         goto cleanup;
     }
 
     size_t bytes_read = fread(buffer, 1, file_size, input);
     if (bytes_read != (size_t)file_size) {
-        printf("Error: Cannot read file completely. Read %zu of %ld bytes\n", bytes_read, file_size);
         return_code = 2;
         goto cleanup;
     }

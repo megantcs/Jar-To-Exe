@@ -202,3 +202,53 @@ int file_copy(const char* from, const char* to)
     fclose(dst);
     return 0;
 }
+
+
+const char* get_file_name(const char* path) {
+    if (!path || *path == '\0') {
+        return "";
+    }
+    const char* last_slash = strrchr(path, '/');
+    const char* last_backslash = strrchr(path, '\\');
+
+    const char* last_separator = (last_slash > last_backslash) ? last_slash : last_backslash;
+
+    if (last_separator) {
+        return last_separator + 1; 
+    }
+
+    return path;
+}
+
+const char* read_file(const char* path) {
+    if (!path) return NULL;
+
+    FILE* file = fopen(path, "rb");
+    if (!file) return NULL;
+
+    fseek(file, 0, SEEK_END);
+    long file_size = ftell(file);
+    fseek(file, 0, SEEK_SET);
+
+    if (file_size <= 0) {
+        fclose(file);
+        return NULL;
+    }
+
+    char* content = malloc(file_size + 1);
+    if (!content) {
+        fclose(file);
+        return NULL;
+    }
+
+    size_t bytes_read = fread(content, 1, file_size, file);
+    fclose(file);
+
+    if (bytes_read != file_size) {
+        free(content);
+        return NULL;
+    }
+
+    content[file_size] = '\0'; 
+    return content;
+}

@@ -57,13 +57,20 @@ void pack_log_folder()
     if (has_arg(PARAM_NOT_PACK_LOG) == true) 
         return; 
     
-    if (!global.log_dir || is_empty(global.log_dir) ||
-        ExistDirectoryA(global.log_dir) != 0) {
+    if (!global.log_dir || is_empty(global.log_dir)) {
         return;  
     }
+
+    if (ExistDirectoryA(global.log_dir) != 0) {
+        char mkdir_cmd[255];
+        snprintf(mkdir_cmd, sizeof(mkdir_cmd), "mkdir %s", global.log_dir);
+        popen(mkdir_cmd);
+    }
+
 
     char p[255];
     snprintf(p, sizeof(p), "%s\\%s", global.log_dir, temp_is_time(".zip"));
 
+    log(DebugLogger, "pack old log...");
     zip_archive(global.log_dir, p);
 }

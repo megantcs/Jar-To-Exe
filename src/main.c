@@ -4,9 +4,13 @@
 int main(int argc, char** argv) 
 {
 	int exit_code = 0;
+	int type_convert = get_type_argumts2s2t(SET_PROGRAM_ARGUMENTS,
+		"dll", /*=*/ JAR_TO_DLL,
+		"exe", /*=*/ DLL_TO_EXE);
+
 	__common__start_program(SET_PROGRAM_ARGUMENTS);
 
-	if (argc <= 1) {
+	if (type_convert == InvalidPos) {
 		printf("use: [dll|exe] [options]\n");
 
 		exit_code = 4;
@@ -16,9 +20,7 @@ int main(int argc, char** argv)
 	__common__global_values_check();
 	__common__runtime_check_gl();
 
-	struct buildItem item = create_build_item(global.input, global.output, get_type_argumts2s2t(SET_PROGRAM_ARGUMENTS, 
-		"dll", /*=*/ JAR_TO_DLL,
-		"exe", /*=*/ DLL_TO_EXE));
+	struct buildItem item = create_build_item(global.input, global.output, type_convert);
 
 	build_for_item(&item);
 	

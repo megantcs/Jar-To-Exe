@@ -20,6 +20,7 @@
 #define PARAM_LOG_NOT_CACHE_HEX PARAM(log_not_cache_hex)
 #define PARAM_LOG_NOT_COMPILER PARAM(log_not_compiler)
 #define PARAM_NOT_PACK_LOG PARAM(not_pack_log)
+#define PARAM_NO_AUTO_DETECTED_COMPILER PARAM(no_auto_detected_compiler)
 
 struct global_settings 
 {

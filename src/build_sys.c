@@ -1,6 +1,5 @@
 #include "header/build_sys.h"
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include "header/win32.h"
 #include "header/convertor.h"
@@ -18,13 +17,15 @@ BuildSys* BUILD_SYS_METHOD(ctor)()
     _->custom_args = NULL;
     _->files = NULL;
 
-    strcpy(_->compiler, NONE);
+    COPY_STR(_->compiler, NONE);
 
     return _;
 }
 
 void BUILD_SYS_METHOD(dtor)(BuildSys* _this)
 {
+    DEBUG_ASSERT(_this);
+
     if (_this) {
         free(_this->custom_args);
         free(_this->files);

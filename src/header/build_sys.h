@@ -1,7 +1,7 @@
 #ifndef BUILD_SYS
 #define BUILD_SYS
 
-/* for window 260 */
+/* for window, 260 */
 #define MAX_PATH 255
 
 /* supported compilers */

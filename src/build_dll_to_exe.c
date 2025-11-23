@@ -11,7 +11,8 @@ void build_dll_to_exe(struct buildItem* const _this)
 	log(DebugLogger, "hex set path: %s", hex_path);
 	if (hex_state != 0) {
 		log(MainLogger, "error hex $template_dll_to_exe\\header.h, error code %d", hex_state);
-		return;
+		global.exit_code = -1;
+		goto end;
 	}
 
 	char* files_cpp = get_str_files_in_dir(global.template_dll_to_exe, "*.cpp");
