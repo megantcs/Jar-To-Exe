@@ -24,8 +24,8 @@ jar-to-dll-x64-windows.zip
 # Основные параметры
 input=my_application.jar
 output=my_program.dll
-launch_class=com/company/Main
-launch_method=main
+class=com/company/Main
+method=main
 
 # Дополнительные настройки, log_dir нужно создать самому
 log_dir=logs
