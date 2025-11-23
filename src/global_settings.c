@@ -1,5 +1,7 @@
 #include "header/convertor.h"
 #include "header/logger.h"
+#include "header/win32.h"
+#include "header/files.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -17,6 +19,7 @@ struct global_settings parse_global_settings(const char* path)
     }
 
     struct global_settings settings = { 0 };
+    settings.debug = false;
 
     char line[256];
     while (fgets(line, sizeof(line), file)) {
@@ -32,6 +35,7 @@ struct global_settings parse_global_settings(const char* path)
             if (strcmp(key, "compiler") == 0) strcpy(settings.gnu_compiler, value);
             if (strcmp(key, "template_dll_to_exe") == 0) strcpy(settings.template_dll_to_exe, value);
             if (strcmp(key, "template_jar_to_dll") == 0) strcpy(settings.template_jar_to_dll, value);
+            if (strcmp(key, "log_dir") == 0) strcpy(settings.log_dir, value);
         }
     }
     fclose(file);
@@ -39,3 +43,27 @@ struct global_settings parse_global_settings(const char* path)
     return settings;
 }
 
+void global_settings_set_args(struct global_settings* _this, PROGRAM_ARGUMENTS)
+{
+    DEBUG_ASSERT(_this);
+    DEBUG_ASSERT(argv);
+
+    _this->argc = argc;
+    _this->argv = argv;
+}
+
+void pack_log_folder()
+{
+    if (has_arg(PARAM_NOT_PACK_LOG) == true) 
+        return; 
+    
+    if (!global.log_dir || is_empty(global.log_dir) ||
+        ExistDirectoryA(global.log_dir) != 0) {
+        return;  
+    }
+
+    char p[255];
+    snprintf(p, sizeof(p), "%s\\%s", global.log_dir, temp_is_time(".zip"));
+
+    zip_archive(global.log_dir, p);
+}

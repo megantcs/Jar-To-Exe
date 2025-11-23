@@ -1,4 +1,6 @@
 #include "header/hex_tools.h"
+#include "header/timer.h"
+#include "header/convertor.h"
 
 static void hex_dump_v1(FILE* output, const unsigned char* data, size_t data_size)
 {
@@ -32,6 +34,9 @@ long get_file_size(const char* filename) {
 
 int file_to_hex_dump(const char* input_file, const char* output_file)
 {
+    struct timer* timer = ctor_timer();
+    start_timer(timer);
+
     FILE* input = NULL;
     FILE* output = NULL;
     unsigned char* buffer = NULL;
@@ -80,6 +85,15 @@ cleanup:
     if (buffer) free(buffer);
     if (input) fclose(input);
     if (output) fclose(output);
+
+    double ms = end_timer_ms(timer);
+    dtor_timer(timer);
+
+    double second = ms / 1000;
+    log(DebugLogger, "~ execute hex dumper: %.2f second", second);
+    
+    if (has_arg(PARAM_LOG_NOT_CACHE_HEX) == 0)
+        output_copy("last-cache-hex.h", output_file);
 
     return return_code;
 }

@@ -1,6 +1,7 @@
 #include "header/convertor.h"
 #include "header/hex_tools.h"
 #include "header/files.h"
+#include "header/build_sys.h"
 
 void build_dll_to_exe(struct buildItem* const _this)
 {
@@ -14,10 +15,15 @@ void build_dll_to_exe(struct buildItem* const _this)
 	}
 
 	char* files_cpp = get_str_files_in_dir(global.template_dll_to_exe, "*.cpp");
-	char* files_h = get_str_files_in_dir(global.template_dll_to_exe, "*.h");
-	char* command = str_spr_str("%s %s", files_cpp, files_h);
 
-	compile_gnu(command);
+	BuildSys* builder = build_sys_ctor();
+
+	build_sys_add_arg(builder, files_cpp);
+	build_sys_set_output(builder, global.output);
+	build_sys_set_compiler(builder, global.gnu_compiler);
+	build_sys_build(builder);
+
+	build_sys_dtor(builder);
 end:
 	log(MainLogger, "finished build exe, code: %d", global.exit_code);
 	return;

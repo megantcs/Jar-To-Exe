@@ -4,6 +4,11 @@
 struct Logger
 {
 	const char* _prefix;
+
+	char start_prefix[255];
+	char end_prefix[255];
+
+	int printf;
 };
 
 struct Logger create_logger(const char* prefix);

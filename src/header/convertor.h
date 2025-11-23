@@ -14,6 +14,13 @@
 #define false 0
 #define nullptr 0
 
+#define PARAM(param) ("--" #param)
+
+#define PARAM_DEBUG PARAM(debug)
+#define PARAM_LOG_NOT_CACHE_HEX PARAM(log_not_cache_hex)
+#define PARAM_LOG_NOT_COMPILER PARAM(log_not_compiler)
+#define PARAM_NOT_PACK_LOG PARAM(not_pack_log)
+
 struct global_settings 
 {
     char input[255];
@@ -25,11 +32,18 @@ struct global_settings
 
     char template_jar_to_dll[255];
     char template_dll_to_exe[255];
+    char log_dir[255];
 
     int exit_code;
+    bool debug;
+
+    int argc;
+    char** argv;
 };
 
 struct global_settings parse_global_settings(const char* path);
+void global_settings_set_args(struct global_settings* _this, int argc, char** argv);
+
 extern struct global_settings global;
 
 struct buildItem 
@@ -54,7 +68,13 @@ struct Logger* GetMainLogger();
 #define DebugLogger GetDebugLogger()
 #define MainLogger GetMainLogger()
 
+void pack_log_folder();
+
 void compile_gnu(const char* arguments);
+void compile_gnu_cs2(const char* compiler, const char* args);
+void compile_gnu_cs3(const char* line);
+void output_log(const char* filename, const char* format, ...);
+void output_copy(const char* filename, const char* from);
 
-
+#define has_arg(searched) has_argument(global.argc, global.argv, searched)
 #endif

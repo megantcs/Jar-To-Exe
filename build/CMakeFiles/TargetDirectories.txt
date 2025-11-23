@@ -1,3 +1,0 @@
-C:/Users/inter/Documents/repos/JarToDll/build/CMakeFiles/JarToDll.dir
-C:/Users/inter/Documents/repos/JarToDll/build/CMakeFiles/edit_cache.dir
-C:/Users/inter/Documents/repos/JarToDll/build/CMakeFiles/rebuild_cache.dir

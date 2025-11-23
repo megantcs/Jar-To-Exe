@@ -143,3 +143,62 @@ int exist_directory(const char* path)
 
     return GetLastError();
 }
+
+int write_file(const char* path, const char* format, ...)
+{
+    FILE* file = fopen(path, "w");
+    if (file == NULL) {
+        return -1;
+    }
+
+    va_list args;
+
+    va_start(args, format);
+        vfprintf(file, format, args);
+    va_end(args);
+
+    fclose(file);
+    return 0;
+}
+
+int write_file_va(const char* path, const char* format, va_list args)
+{
+    FILE* file = fopen(path, "w");
+    if (file == NULL) {
+        return -1;
+    }
+    va_list args_copy;
+    va_copy(args_copy, args);
+      int result = vfprintf(file, format, args_copy);
+    va_end(args_copy);
+
+    fclose(file);
+    return result;
+}
+
+int file_copy(const char* from, const char* to)
+{
+    if (!from || !to) return -1;
+
+    FILE* src = fopen(from, "rb");
+    if (!src) return -2;
+
+    FILE* dst = fopen(to, "wb");
+    if (!dst) {
+        fclose(src);
+        return -3;
+    }
+
+    int ch;
+    while ((ch = fgetc(src)) != EOF) {
+        if (fputc(ch, dst) == EOF) {
+            fclose(src);
+            fclose(dst);
+            return -4; 
+        }
+    }
+
+    fclose(src);
+    fclose(dst);
+    return 0;
+}

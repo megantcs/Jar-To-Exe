@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdarg.h>
-
+#include <windows.h>
 
 #define TRUE 1
 #define FALSE 0
@@ -118,6 +118,12 @@ const char* get_argument_splits(PROGRAM_ARGUMENTS, const char* searched, char de
 	return InvalidPos;
 }
 
+int find_str(const char* str, const char* substring)
+{
+	char* pos = strstr(str, substring);
+	return pos ? (int)(pos - str) : -1;
+}
+
 int str_get_pos(const char* source, char del)
 {
 	size_t size = strlen(source);
@@ -139,4 +145,36 @@ int get_type_argumts2s2t(PROGRAM_ARGUMENTS, const char* first, int first_type, c
 	if (has_argument(SET_PROGRAM_ARGUMENTS, second)) return second_type;
 
 	return InvalidPos;
+}
+
+void critical_assert_dialog(const char* file, int line, const char* expression, const char* function)
+{
+	char message[1024];
+	char title[256];
+
+	snprintf(message, sizeof(message),
+		"    CRITICAL ASSERTION FAILED \n\n"
+		"File: %s\n"
+		"Line: %d\n"
+		"Function: %s\n"
+		"Expression: %s\n\n"
+		"What do you want to do?",
+		file, line, function, expression);
+
+	snprintf(title, sizeof(title), "Critical Error - %s", function);
+
+	int result = MessageBoxA(NULL, message, title,
+		MB_ICONERROR | MB_ABORTRETRYIGNORE | MB_DEFBUTTON1);
+
+	switch (result) {
+	case IDABORT:
+		ExitProcess(1);  
+		break;
+	case IDRETRY:
+		DebugBreak();    
+		break;
+	case IDIGNORE:
+		return;          
+		break;
+	}
 }
