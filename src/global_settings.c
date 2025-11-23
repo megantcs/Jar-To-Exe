@@ -30,6 +30,8 @@ struct global_settings parse_global_settings(const char* path)
             if (strcmp(key, "class") == 0) strcpy(settings.launch_method, value);
             if (strcmp(key, "method") == 0) strcpy(settings.launch_class, value);
             if (strcmp(key, "compiler") == 0) strcpy(settings.gnu_compiler, value);
+            if (strcmp(key, "template_dll_to_exe") == 0) strcpy(settings.template_dll_to_exe, value);
+            if (strcmp(key, "template_jar_to_dll") == 0) strcpy(settings.template_jar_to_dll, value);
         }
     }
     fclose(file);

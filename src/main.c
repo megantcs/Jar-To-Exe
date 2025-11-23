@@ -1,18 +1,32 @@
 #include "header/convertor.h"
-#include "header/hex_tools.h"
-
-#include <stdio.h>
+#include "header/files.h"
+#include "header/program.h"
+#include <crtdbg.h>
 
 int main(int argc, char** argv) 
 {
-	const char* path = "config.txt";
-	const char* custom_path = get_argument_splits(SET_PROGRAM_ARGUMENTS, "config", '=');
-	if (custom_path != InvalidPos) 
-	{
-		path = custom_path;
+	int exit_code = 0;
+	if (argc <= 1) {
+		printf("use: [dll|exe] [options]");
+
+		exit_code = 4;
+		goto end;
 	}
+	__common__start_program(SET_PROGRAM_ARGUMENTS);
+	__common__global_values_check();
+	__common__runtime_check_gl();
 
-	global = parse_global_settings("config.txt");
+	struct buildItem item = create_build_item(global.input, global.output, get_type_argumts2s2t(SET_PROGRAM_ARGUMENTS, 
+		"dll", JAR_TO_DLL, 
+		"exe", DLL_TO_EXE));
 
-	file_to_hex_dump("config.txt", "config.h");
+	build_for_item(&item);
+	
+	exit_code = global.exit_code;
+end:
+	__common__end_program();
+	log(MainLogger, "finished work, in %.2f second, exit code: %d", 
+		MS_TO_SECOND(__common__get_program_duration()), exit_code);
+
+	return exit_code;
 }

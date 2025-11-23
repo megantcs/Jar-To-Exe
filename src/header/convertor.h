@@ -20,7 +20,13 @@ struct global_settings
     char output[255];
     char launch_method[255];
     char launch_class[255];
+    
     char gnu_compiler[255];
+
+    char template_jar_to_dll[255];
+    char template_dll_to_exe[255];
+
+    int exit_code;
 };
 
 struct global_settings parse_global_settings(const char* path);
@@ -36,6 +42,9 @@ struct buildItem
 
 struct buildItem create_build_item(const char* input, const char* output, uint8_t type);
 void build_jar_to_dll(struct buildItem* const _this);
+void build_dll_to_exe(struct buildItem* const _this);
+
+void build_for_item(struct buildItem* const _this);
 
 struct Logger* GetConfigLogger();
 struct Logger* GetDebugLogger();

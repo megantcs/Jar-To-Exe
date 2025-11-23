@@ -11,11 +11,12 @@ struct Logger create_logger(const char* prefix)
 void log(struct Logger* _this, const char* _format, ...)
 {
 	va_list list;
+
 	va_start(list, _format);
 
-	printf("$ [%s] ", _this->_prefix);
-	vprintf(_format, list);
-	printf("\n");
+		printf("$ [%s] ", _this->_prefix);
+		vprintf(_format, list);
+		printf("\n");
 
 	va_end(list);
 	

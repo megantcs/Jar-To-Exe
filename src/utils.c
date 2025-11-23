@@ -1,5 +1,9 @@
 #include "header/utils.h"
+
 #include <string.h>
+#include <stdio.h>
+#include <stdarg.h>
+
 
 #define TRUE 1
 #define FALSE 0
@@ -47,6 +51,55 @@ const char* get_argument_add_pos(int argc, char** argv, const char* searched)
 	return argv[tPos];
 }
 
+int is_empty(const char* t)
+{
+	if (strlen(t) == 0) return 1;
+	if(t[0] == '\0') return 1;
+
+	return 0;
+}
+
+char* str_spr_str(const char* format, ...)
+{
+	if (format == NULL) {
+		return strdup(""); 
+	}
+
+	char stack_buf[1024];
+	va_list list;
+
+	va_start(list, format);
+	int result = vsnprintf(stack_buf, sizeof(stack_buf), format, list);
+	va_end(list);
+
+	if (result < 0) {
+		return strdup("");
+	}
+
+	if (result < (int)sizeof(stack_buf)) {
+		return strdup(stack_buf);
+	}
+
+	char* heap_buf = (char*)malloc(result + 1);
+	if (heap_buf == NULL) {
+		return strdup(stack_buf); 
+	}
+
+	va_start(list, format);
+	vsnprintf(heap_buf, result + 1, format, list);
+	va_end(list);
+
+	return heap_buf;
+}
+
+char* add_str2_macro(const char* first, const char* second)
+{
+	return str_spr_str("%s%s", first, second);
+}
+char* add_str3_macro(const char* first, const char* second, const char* tr)
+{
+	return str_spr_str("%s%s%s", first, second, tr);
+}
 const char* get_argument_splits(PROGRAM_ARGUMENTS, const char* searched, char del)
 {
 	SYM_FOR(argc, argv)
@@ -78,4 +131,12 @@ int str_get_pos(const char* source, char del)
 	}
 
 	return pos;
+}
+
+int get_type_argumts2s2t(PROGRAM_ARGUMENTS, const char* first, int first_type, const char* second, int second_type)
+{
+	if (has_argument(SET_PROGRAM_ARGUMENTS, first)) return first_type;
+	if (has_argument(SET_PROGRAM_ARGUMENTS, second)) return second_type;
+
+	return InvalidPos;
 }
