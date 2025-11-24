@@ -50,6 +50,6 @@ JarToDll.exe dll config=config.txt --debug
 ## Сборка
 - ```bash git clone https://github.com/megantcs/Jar-To-Exe.git ```
 - ```bash mkdir build```
-- ```bashcd build```
+- ```bash cd build```
 - ```bash cmake ..```
 - ```bash cmake --build .```
