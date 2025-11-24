@@ -45,6 +45,11 @@ JarToDll.exe exe config=config.txt
 # Режим отладки
 JarToDll.exe dll config=config.txt --debug
 ```
+на выходе вы получите my_program.dll из output
 
-##### на выходе вы получите my_program.dll из output
-
+## Сборка
+- git clone https://github.com/megantcs/Jar-To-Exe.git
+- mkdir build
+- cd build
+- cmake ..
+- cmake --build .
