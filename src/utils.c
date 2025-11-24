@@ -35,10 +35,6 @@ int find_argument(int argc, char** argv, const char* searched)
 }
 
 
-void substr(char* str, char* sub, int start, int len) {
-	memcpy(sub, &str[start], len);
-	sub[len] = '\0';
-}
 
 const char* get_argument_add_pos(int argc, char** argv, const char* searched)
 {
@@ -100,22 +96,34 @@ char* add_str3_macro(const char* first, const char* second, const char* tr)
 {
 	return str_spr_str("%s%s%s", first, second, tr);
 }
+
+void substr(char* str, char* sub, int start, int len) {
+	memcpy(sub, &str[start], len);
+	sub[len] = '\0';
+}
+
 const char* get_argument_splits(PROGRAM_ARGUMENTS, const char* searched, char del)
 {
 	SYM_FOR(argc, argv)
 	{
 		const char* line = argv[i];
+
+		if (strncmp(line, searched, strlen(searched)) != 0) continue;
+
 		int pos = str_get_pos(line, del);
 		if (pos == InvalidPos) continue;
 
-		const char* second[100];
-		substr(line, second, pos + 1, strlen(line));
+		if (pos < (int)strlen(searched)) continue;
 
+		char* second = (char*)malloc(strlen(line) - pos);
+		if (second == NULL) return NULL;
+
+		substr(line, second, pos + 1, strlen(line) - pos - 1);
 
 		return second;
 	}
 
-	return InvalidPos;
+	return NULL;
 }
 
 int find_str(const char* str, const char* substring)
